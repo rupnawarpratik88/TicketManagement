@@ -1,6 +1,8 @@
 package com.pratik.ticketmanager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Entity
@@ -12,11 +14,14 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title cannot be empty")
     private String title;
 
+    @NotBlank(message = "Description cannot be empty")
     private String description;
 
-    private String status = "OPEN"; // OPEN, IN_PROGRESS, CLOSED
+    private String status = "OPEN";
 
-    private String priority = "MEDIUM"; // LOW, MEDIUM, HIGH
+    @Pattern(regexp = "LOW|MEDIUM|HIGH", message = "Priority must be LOW, MEDIUM, or HIGH")
+    private String priority = "MEDIUM";
 }

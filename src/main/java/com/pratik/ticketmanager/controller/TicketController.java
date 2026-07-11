@@ -1,13 +1,12 @@
 package com.pratik.ticketmanager.controller;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-
 
 import com.pratik.ticketmanager.model.Ticket;
 import com.pratik.ticketmanager.repository.TicketRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,22 +37,19 @@ public class TicketController {
         return ticketRepository.findAll(pageable);
     }
 
-    // Get a single ticket by id
     @GetMapping("/{id}")
     public Ticket getTicketById(@PathVariable Long id) {
         return ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found with id " + id));
     }
 
-    // Create a new ticket
     @PostMapping
-    public Ticket createTicket(@RequestBody Ticket ticket) {
+    public Ticket createTicket(@Valid @RequestBody Ticket ticket) {
         return ticketRepository.save(ticket);
     }
 
-    // Update a ticket
     @PutMapping("/{id}")
-    public Ticket updateTicket(@PathVariable Long id, @RequestBody Ticket updatedTicket) {
+    public Ticket updateTicket(@PathVariable Long id, @Valid @RequestBody Ticket updatedTicket) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found with id " + id));
         ticket.setTitle(updatedTicket.getTitle());
@@ -63,7 +59,6 @@ public class TicketController {
         return ticketRepository.save(ticket);
     }
 
-    // Delete a ticket
     @DeleteMapping("/{id}")
     public String deleteTicket(@PathVariable Long id) {
         ticketRepository.deleteById(id);
