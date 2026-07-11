@@ -1,4 +1,9 @@
 package com.pratik.ticketmanager.controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+
 
 import com.pratik.ticketmanager.model.Ticket;
 import com.pratik.ticketmanager.repository.TicketRepository;
@@ -14,10 +19,23 @@ public class TicketController {
     @Autowired
     private TicketRepository ticketRepository;
 
-    // Get all tickets
     @GetMapping
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
+    public Page<Ticket> getAllTickets(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        if (status != null && priority != null) {
+            return ticketRepository.findByStatusAndPriority(status, priority, pageable);
+        } else if (status != null) {
+            return ticketRepository.findByStatus(status, pageable);
+        } else if (priority != null) {
+            return ticketRepository.findByPriority(priority, pageable);
+        }
+        return ticketRepository.findAll(pageable);
     }
 
     // Get a single ticket by id
