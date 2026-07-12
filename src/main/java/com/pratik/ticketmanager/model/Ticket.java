@@ -20,6 +20,7 @@ public class Ticket {
     @NotBlank(message = "Description cannot be empty")
     private String description;
 
+    @Pattern(regexp = "OPEN|IN_PROGRESS|CLOSED", message = "Status must be OPEN, IN_PROGRESS, or CLOSED")
     private String status = "OPEN";
 
     @Pattern(regexp = "LOW|MEDIUM|HIGH", message = "Priority must be LOW, MEDIUM, or HIGH")
